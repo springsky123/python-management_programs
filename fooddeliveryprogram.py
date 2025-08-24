@@ -1,81 +1,76 @@
 #FOOD DELIVERY PROGRAM
 
 import random
-from prettytable import PrettyTable
 
 class customer:
     def __init__(self):
-        self.order = []
-        self.a_instance = Restaurant
-    def place_order(self):
-        menu = self.a_instance.display_menu()
-        print(menu)
-        print("----------SELECT ITEMS FORM MENU------------")
+        self.current_order = None
+        self.order_history = []
+
+    def place_order(self, restaurant):
+        if self.current_order:
+            print("You already have an active order. Please cancel it first.")
+            return
+
+        order = Order()
+        restaurant.display_menu()
+
         while True:
-            item_name = input("Enter item name(or 'done' to finish):")
-            if item_name=='done':
-                break
-            elif item_name in menu:
-                try:
-                    quantity = input(f"Enter quantity of {item_name}:")
-                    if quantity>0:
-                        data = [item_name,quantity,price]
-                        self.order.append(data)
-                except ValueError:
-                    print("Quantity must be positive.")
-            else:
-                print("Item not found.Please choose from the menu.")
-        file.close()
+            try:
+                item_id = int(input("Enter item ID to add (0 to finish): "))
+                if item_id == 0:
+                    break
+                if item_id not in restaurant.menu:
+                    print(" Invalid item ID.")
+                    continue
+                quantity = int(input("Enter quantity: "))
+                item = restaurant.menu[item_id]
+                order.add_item(item["name"], item["price"], quantity)
+            except ValueError:
+                print("Please enter valid numbers.")
+
+        if order.items:
+            self.current_order = order
+            self.order_history.append(order)
+            print("Order placed successfully.")
+        else:
+            print(" No items were added. Order not placed.")
+
     def cancel_order(self):
-        pass
+        if self.current_order:
+            print("Order cancelled.")
+            self.current_order = None
+        else:
+            print("No active order to cancel.")
+
     def view_order(self):
-        print("Your order list is:")
-        table = PrettyTable()
-        table.field_names = ['ITEM_NAME','QUANTITY','PRICE']
-        for row in order:
-            table.add_row(row)
-        print(table)
-    def order_history(self):
-        pass
-    #function for options to choose 
-    def options(self):
-        print('......................................')
-        print('1.For place order ')
-        print('2.For cancel order ')
-        print('3.For view order')
-        print('4.For see order history')
-        print('.......................................')
-        option = int(input('enter your choice:'))
-        return option
-    #Instance method to work on choice
-    def choice_by_option(self):
-        choice ='y'
-        while choice=='y':
-            opt = self.options()
-            if opt==1:
-                self.place_order()
-            elif opt==2:
-                self.cancel_order()
-            elif opt==3:
-                self.view_order()
-            elif opt==4:
-                self.order_history()
-            else:
-                print('......invaild choice,please try again!..........')
-            print()    
-            choice = input('>Do you want to continue?(type*y*for yes):')
+        if self.current_order:
+            print(f"\n Current Order (Status: {self.current_order.status}):")
+            self.current_order.show_ordered_items()
+        else:
+            print(" No active order.")
+
+    def view_order_history(self):
+        print(f"\n Order History of {self.name}:")
+        if not self.order_history:
+            print("No past orders.")
+            return
+        for i, order in enumerate(self.order_history, 1):
+            print(f"\n Order #{i} - Status: {order.status}")
+            order.show_ordered_items()
+
 class order:
     def __init__(self):
         self.status = {}
-    def ordered_item:
+    def ordered_item(self):
         item = input("Enter item name:")
         amount = int(input("Enter the amount of item:"))
         status[item]=[amount]
-    def total_price:
+    def total_price(self):
         pass
-    def update_status:
+    def update_status(self):
         pass
-class Restaurant:
+class restaurant:
     def __init__(self):
         self.app_name = "Fastfood"
     def display_menu(self):
