@@ -58,7 +58,33 @@ class customer:
         for i, order in enumerate(self.order_history, 1):
             print(f"\n Order #{i} - Status: {order.status}")
             order.show_ordered_items()
-
+    #function for options to choose 
+    def options(self):
+        print('......................................')
+        print('1.For place order ')
+        print('2.For cancel order ')
+        print('3.For view order')
+        print('4.For see order history')
+        print('.......................................')
+        option = int(input('enter your choice:'))
+        return option
+    #Instance method to work on choice
+    def choice_by_option(self):
+        choice ='y'
+        while choice=='y':
+            opt = self.options()
+            if opt==1:
+                self.place_order()
+            elif opt==2:
+                self.cancel_order()
+            elif opt==3:
+                self.view_order()
+            elif opt==4:
+                self.view_order_history()
+            else:
+                print('......invaild choice,please try again!..........')
+            print()    
+            choice = input('>Do you want to continue?(type*y*for yes):')
 class order:
     def __init__(self):
         self.status = {}
